@@ -6,8 +6,9 @@ import os
 import subprocess
 import requests
 import json
-
 import psutil
+
+from config import *
 
 #
 # Global variables
@@ -29,20 +30,23 @@ scrollers = [None]
 #
 SCROLL_TIME = 0.1
 REFRESH_TIME = 0.1
+SUB_MSGS_SCROLL_TIME = 0.0000001
 
 #
 # Lines related constants
 #
-NUM_LINES = 4
+NUM_LINES = 5
 
 EMAIL_LINE = 1
 CMD_LINE = 2
 SYSTEM_DETAILS_LINE = 3
+SUB_MSGS_LINE = 4
 
 LINE_NAME_DICT = {
     EMAIL_LINE : {"name" : "Email Line", "header" : "Email"},
     CMD_LINE : {"name" : "Command Line", "header" : "Command"},
-    SYSTEM_DETAILS_LINE : {"name" : "System Details Line", "header" : "System Details"}
+    SYSTEM_DETAILS_LINE : {"name" : "System Details Line", "header" : "System Details"},
+    SUB_MSGS_LINE : {"name" : "Subliminal Messages Line", "header" : "Subliminal Messages"}
 }
 
 scroller_names = ["Line_Thread_%d" % (x) for x in range(1, NUM_LINES)]
@@ -65,10 +69,16 @@ class Line():
     def show_data(self, x):
         global stdscr
 
-        curses.setsyx(self.line_no, 0)
-        stdscr.clrtoeol()
-        stdscr.attron(curses.color_pair(1))
-        stdscr.attron(curses.A_BOLD)
+        if self.name == "Subliminal Messages Line":
+            curses.setsyx(self.line_no, 0)
+            stdscr.clrtoeol()
+            stdscr.attron(curses.color_pair(2))
+            # stdscr.attron(curses.A_BOLD)
+        else:
+            curses.setsyx(self.line_no, 0)
+            stdscr.clrtoeol()
+            stdscr.attron(curses.color_pair(1))
+            stdscr.attron(curses.A_BOLD)
 
         if len(self.data) > width:
             self.start_x = (len(self.header) + 2)
@@ -144,6 +154,14 @@ class Command_Processor(threading.Thread):
                 except:
                     status("Exception while showing system utils data")
 
+            if cmd == ord('m'):
+                try:
+                    lines[SUB_MSGS_LINE].data = "    ".join(messages)
+                    scrollers[SUB_MSGS_LINE].x = 0
+                    lines[SUB_MSGS_LINE].num_scrolled = 1
+                except:
+                    status("Exception while showing subliminal messages data")
+
             time.sleep(SCROLL_TIME)
             if stop_threads:
                 break
@@ -168,7 +186,11 @@ class Scroller(threading.Thread):
                 self.line.scroll_reset = False
 
             self.line.show_data(self.x)
-            time.sleep(0.1)
+
+            if self.name == "Scroller for line 4":
+                time.sleep(SUB_MSGS_SCROLL_TIME)
+            else:
+                time.sleep(SCROLL_TIME)
             if stop_threads:
                 break
             self.x += 1
@@ -243,6 +265,7 @@ def set_init_lines():
     set_init_line(EMAIL_LINE, "", EMAIL_LINE, 0)
     set_init_line(CMD_LINE, "", CMD_LINE, 0)
     set_init_line(SYSTEM_DETAILS_LINE, "", SYSTEM_DETAILS_LINE, 0)
+    set_init_line(SUB_MSGS_LINE, "", SUB_MSGS_LINE, 0)
 
 def status(msg):
     stdscr.addstr(height - 1, 50, str(msg))
@@ -264,7 +287,10 @@ def draw_menu(stdscr):
 
     # Start colors in curses
     curses.start_color()
+
     curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
 
     while True:
         #
