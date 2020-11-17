@@ -22,7 +22,7 @@ python matrix.py
 
 This is followed by the curses screen being displayed as shown below:
 
-
+[image] https://github.com/suchindrac/matrix_digital_rain_scroller/raw/main/matrix_screen.png "Initial Screen"
 
 The first section at the top is the help window, and gives basic details such as width and height of the screen and some help messages
 The second section is a set of lines, one below another, where messages (emails/outputs of commands/system details) are seen
