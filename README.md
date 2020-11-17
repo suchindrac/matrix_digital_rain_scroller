@@ -37,6 +37,8 @@ Type in "s" (without the quotes) and notice that system details are displayed in
 
 Type in "q" (without the quotes) to quit the application
 
+Type in "b" (without the quotes) to display subliminal messages on line 4
+
 Below is a video of the application:
 
 https://github.com/suchindrac/matrix_digital_rain_scroller/raw/main/matrix_scroller.mp4
