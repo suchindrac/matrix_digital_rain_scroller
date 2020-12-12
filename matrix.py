@@ -35,18 +35,20 @@ SUB_MSGS_SCROLL_TIME = 0.0000001
 #
 # Lines related constants
 #
-NUM_LINES = 5
+NUM_LINES = 6
 
 EMAIL_LINE = 1
 CMD_LINE = 2
 SYSTEM_DETAILS_LINE = 3
-SUB_MSGS_LINE = 4
+SUB_MSGS_LINE_1 = 4
+SUB_MSGS_LINE_2 = 5
 
 LINE_NAME_DICT = {
     EMAIL_LINE : {"name" : "Email Line", "header" : "Email"},
     CMD_LINE : {"name" : "Command Line", "header" : "Command"},
     SYSTEM_DETAILS_LINE : {"name" : "System Details Line", "header" : "System Details"},
-    SUB_MSGS_LINE : {"name" : "Subliminal Messages Line", "header" : "Subliminal Messages"}
+    SUB_MSGS_LINE_1 : {"name" : "Subliminal Messages Line", "header" : "Subliminal Messages"},
+    SUB_MSGS_LINE_2 : {"name" : "Subliminal Messages Line", "header" : "Subliminal Messages"}
 }
 
 scroller_names = ["Line_Thread_%d" % (x) for x in range(1, NUM_LINES)]
@@ -156,9 +158,12 @@ class Command_Processor(threading.Thread):
 
             if cmd == ord('m'):
                 try:
-                    lines[SUB_MSGS_LINE].data = "    ".join(messages)
-                    scrollers[SUB_MSGS_LINE].x = 0
-                    lines[SUB_MSGS_LINE].num_scrolled = 1
+                    lines[SUB_MSGS_LINE_1].data = "    ".join(messages_1)
+                    lines[SUB_MSGS_LINE_2].data = "    ".join(messages_2)
+                    scrollers[SUB_MSGS_LINE_1].x = 0
+                    lines[SUB_MSGS_LINE_1].num_scrolled = 1
+                    scrollers[SUB_MSGS_LINE_2].x = 0
+                    lines[SUB_MSGS_LINE_2].num_scrolled = 1
                 except:
                     status("Exception while showing subliminal messages data")
 
@@ -187,7 +192,7 @@ class Scroller(threading.Thread):
 
             self.line.show_data(self.x)
 
-            if self.name == "Scroller for line 4":
+            if self.name == "Scroller for line 4" or self.name == "Scroller for line 5":
                 time.sleep(SUB_MSGS_SCROLL_TIME)
             else:
                 time.sleep(SCROLL_TIME)
@@ -265,7 +270,8 @@ def set_init_lines():
     set_init_line(EMAIL_LINE, "", EMAIL_LINE, 0)
     set_init_line(CMD_LINE, "", CMD_LINE, 0)
     set_init_line(SYSTEM_DETAILS_LINE, "", SYSTEM_DETAILS_LINE, 0)
-    set_init_line(SUB_MSGS_LINE, "", SUB_MSGS_LINE, 0)
+    set_init_line(SUB_MSGS_LINE_1, "", SUB_MSGS_LINE_1, 0)
+    set_init_line(SUB_MSGS_LINE_2, "", SUB_MSGS_LINE_2, 0)
 
 def status(msg):
     stdscr.addstr(height - 1, 50, str(msg))
