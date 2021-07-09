@@ -12,7 +12,7 @@ As of now, 5lines are allocated for viewing the messages:
   * The first line shows (would show actually), the unread email messages in inbox (TBD)
   * The second line shows the output of previous command executed
   * The third line shows system details such as memory used, CPU used, disk space etc
-  * The fourth and fifth lines show subliminal messages
+  * The fourth and fifth lines (added recently) show subliminal messages
 
 To be concise: Subliminal messages enter into your subconscious mind (which is in a higher dimension), when you create "patterns" of events and make those patterns miss conscious mind. This technique generates pattern of events through scrolling, as compared to flickering of messages on screen
 
