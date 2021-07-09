@@ -59,6 +59,7 @@ class Line():
         self.line_no = line_no
         self.header = header
         self.data = data
+        self.space_to_display = width - (len(self.header) + 2) - 1
         self.scroll_reset = False
         self.y = 0
         self.x = 0
@@ -67,43 +68,29 @@ class Line():
         self.d_finish = 0
         self.num_scrolled = 1
         self.to_display = ""
+        self.data_len = len(self.data)
 
-    def show_data(self, x):
+    def show_data(self):
         global stdscr
 
         if self.name == "Subliminal Messages Line":
             curses.setsyx(self.line_no, 0)
             stdscr.clrtoeol()
             stdscr.attron(curses.color_pair(2))
-            # stdscr.attron(curses.A_BOLD)
         else:
             curses.setsyx(self.line_no, 0)
             stdscr.clrtoeol()
             stdscr.attron(curses.color_pair(1))
             stdscr.attron(curses.A_BOLD)
 
-        if len(self.data) > width:
-            self.start_x = (len(self.header) + 2)
-            self.finish_x = width - 1
-            self.d_length = self.finish_x - self.start_x
-            self.d_finish = self.d_start + self.d_length
-            self.to_display = self.data[self.d_start: self.d_finish]
+        if len(self.data) > self.space_to_display:
+            self.to_display = self.data[: self.space_to_display]
             self.line = "%s: %s" % (self.header, self.to_display)
-            self.d_start += 1
         else:
             self.to_display = self.data
-            self.line = "%s: %s%s" % (self.header, " " * x, self.to_display)
-            if len(self.line) > width:
-                self.line = "%s: %s%s%s" % (self.header,
-                                                self.to_display[-self.num_scrolled:],
-                                                " " * (x - self.num_scrolled),
-                                                self.to_display)
-                self.num_scrolled += 1
+            self.line = "%s: %s" % (self.header, self.to_display)
 
-        if len(self.line) == width + len(self.data):
-            self.scroll_reset = True
-            self.num_scrolled = 1
-
+        self.data = self.data[self.data_len - 1:] + self.data[:self.data_len - 1]
         stdscr.addnstr(self.y, self.x, self.line, width)
 
 class Command_Processor(threading.Thread):
@@ -136,6 +123,7 @@ class Command_Processor(threading.Thread):
                     result = result.decode("ascii")
                     result = result.replace("\n", "    ")
                     lines[CMD_LINE].data = result
+                    lines[CMD_LINE].d_start = 0
                     scrollers[CMD_LINE].x = 0
                     lines[CMD_LINE].num_scrolled = 1
                 except Exception as e:
@@ -186,11 +174,7 @@ class Scroller(threading.Thread):
     def run(self):
         global stop_threads
         while True:
-            if self.line.scroll_reset:
-                self.x = 0
-                self.line.scroll_reset = False
-
-            self.line.show_data(self.x)
+            self.line.show_data()
 
             if self.name == "Scroller for line 4" or self.name == "Scroller for line 5":
                 time.sleep(SUB_MSGS_SCROLL_TIME)
@@ -198,7 +182,6 @@ class Scroller(threading.Thread):
                 time.sleep(SCROLL_TIME)
             if stop_threads:
                 break
-            self.x += 1
 
 def set_line_data(line_no, data):
     global lines
