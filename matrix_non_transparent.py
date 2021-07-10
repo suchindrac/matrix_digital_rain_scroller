@@ -74,14 +74,14 @@ class Line():
         global stdscr
 
         if self.name == "Subliminal Messages Line":
-             curses.setsyx(self.line_no, 0)
-             stdscr.clrtoeol()
-             stdscr.attron(curses.color_pair(2))
+            curses.setsyx(self.line_no, 0)
+            stdscr.clrtoeol()
+            stdscr.attron(curses.color_pair(2))
         else:
-             curses.setsyx(self.line_no, 0)
-             stdscr.clrtoeol()
-             stdscr.attron(curses.color_pair(1))
-             stdscr.attron(curses.A_BOLD)
+            curses.setsyx(self.line_no, 0)
+            stdscr.clrtoeol()
+            stdscr.attron(curses.color_pair(1))
+            stdscr.attron(curses.A_BOLD)
 
         if len(self.data) > self.space_to_display:
             self.to_display = self.data[: self.space_to_display]
@@ -277,11 +277,9 @@ def draw_menu(stdscr):
     # Start colors in curses
     curses.start_color()
 
-    curses.use_default_colors()
-    # curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    # curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(1, curses.COLOR_WHITE, -1)
-    curses.init_pair(2, curses.COLOR_WHITE, -1)
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
 
     while True:
         #
