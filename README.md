@@ -18,7 +18,11 @@ To be concise: Subliminal messages enter into your subconscious mind (which is i
 
 ## Execution:
 
-Just type the following command:
+NOTE: To ensure transparency can be enjoyed, you will have to enable transparency in your terminal as follows:
+
+* Go to Preferences -> Profile "Default"
+* Select "Use transparent background" and set the slider to full
+* Then execute the following command:
 
 ```python
 python3 matrix.py
