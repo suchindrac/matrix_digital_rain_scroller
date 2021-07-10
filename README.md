@@ -22,6 +22,9 @@ NOTE: To ensure transparency can be enjoyed, you will have to enable transparenc
 
 * Go to Preferences -> Profile "Default"
 * Select "Use transparent background" and set the slider to full
+
+![alt text](https://github.com/suchindrac/matrix_digital_rain_scroller/raw/main/transparency_settings.png "Transparency settings screen")
+
 * Then execute the following command:
 
 ```python
